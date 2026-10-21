@@ -52,7 +52,8 @@ ContactsListView/
 |---|---|---|
 | ![Ajout](screenshots/ajout.png) | ![Suppression](screenshots/suppression.png) | ![Erreur](screenshots/erreur.png) |
 
-## Limite connue
+## Rotation de l'écran
 
-Quand l'écran est tourné, Android recrée l'activité et la liste revient à ses valeurs de départ : les modifications sont perdues. Une amélioration possible est de placer la liste dans un `ViewModel`, qui survit à la rotation.
+Les contacts et la sélection sont conservés après une rotation grâce à un `ViewModel`
+(`ContactsViewModel`), qui survit à la recréation de l'activité.
 

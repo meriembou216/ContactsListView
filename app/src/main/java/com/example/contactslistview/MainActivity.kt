@@ -9,20 +9,22 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
 
-    // 1) Les données : une liste MODIFIABLE de chaînes
-    private val contacts = mutableListOf(
-        "Ahmed Ben Ali",
-        "Sarra Trabelsi",
-        "Mohamed Gharbi",
-        "Ines Jaziri",
-        "Youssef Mansouri",
-        "Amira Chaabane",
-        "Karim Bouazizi",
-        "Nour Hammami"
-    )
+    // 1) Le ViewModel garde les données quand l'écran tourne
+    private lateinit var viewModel: ContactsViewModel
+
+    private val contacts: MutableList<String>
+        get() = viewModel.contacts
+
+    // Position de l'élément sélectionné (-1 = aucune sélection)
+    private var positionSelectionnee: Int
+        get() = viewModel.positionSelectionnee
+        set(value) {
+            viewModel.positionSelectionnee = value
+        }
 
     // 2) L'adaptateur fait le lien entre les données et la ListView
     private lateinit var adapter: ArrayAdapter<String>
@@ -34,12 +36,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnSupprimer: Button
     private lateinit var lvContacts: ListView
 
-    // Position de l'élément sélectionné (-1 = aucune sélection)
-    private var positionSelectionnee = -1
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Récupère le ViewModel (le même objet est conservé après une rotation)
+        viewModel = ViewModelProvider(this)[ContactsViewModel::class.java]
 
         // Récupération des vues déclarées dans activity_main.xml
         etContact = findViewById(R.id.etContact)
@@ -48,9 +50,6 @@ class MainActivity : AppCompatActivity() {
         btnSupprimer = findViewById(R.id.btnSupprimer)
         lvContacts = findViewById(R.id.lvContacts)
 
-        // Liste triée dès le départ, sans tenir compte des majuscules
-        contacts.sortWith(String.CASE_INSENSITIVE_ORDER)
-
         // simple_list_item_activated_1 met en surbrillance l'élément sélectionné
         adapter = ArrayAdapter(
             this,
@@ -58,6 +57,11 @@ class MainActivity : AppCompatActivity() {
             contacts
         )
         lvContacts.adapter = adapter
+
+        // Après une rotation, on remet en surbrillance l'élément sélectionné
+        if (positionSelectionnee != -1) {
+            lvContacts.setItemChecked(positionSelectionnee, true)
+        }
 
         // Clic sur un élément : on copie son texte dans l'EditText
         lvContacts.setOnItemClickListener { _, _, position, _ ->
