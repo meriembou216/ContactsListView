@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Disposition verticale : EditText + Bouton en haut, ListView en dessous -->
+<!-- Disposition verticale : saisie + boutons en haut, ListView en dessous -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Ligne du haut : zone de saisie + bouton -->
+    <!-- Ligne du haut : zone de saisie + boutons Modifier et Ajouter -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,7 +27,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_modifier" />
+
+        <Button
+            android:id="@+id/btnAjouter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_ajouter" />
     </LinearLayout>
+
+    <!-- Bouton Supprimer (supprime le contact sélectionné) -->
+    <Button
+        android:id="@+id/btnSupprimer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_supprimer" />
 
     <!-- La liste des contacts -->
     <ListView
